@@ -1,0 +1,21 @@
+Package: ASEplot
+Version: 0.0
+Date: 2025-04-08
+Title: plot ASE data
+Authors@R: c(person("Weisheng Wu", "Developer", role = c("aut", "cre"), email = "weishwu@umich.edu"))
+Author: Weisheng Wu [aut, cre]
+Maintainer: Weisheng Wu <weishwu@umich.edu>
+Depends: R (>= 3.1.0)
+Description: plot ASE data
+License: GPL (>= 2)
+URL: https://cran.r-project.org/package=ASEplot
+Encoding: UTF-8
+Imports:
+    ggplot2
+    ggrepel
+    pheatmap
+    tidyverse
+Imports:
+    roxygen2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
