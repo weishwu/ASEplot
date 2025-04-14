@@ -2,7 +2,7 @@
 % Please edit documentation in R/ase_data_in_gene.R
 \name{ase_data_in_gene}
 \alias{ase_data_in_gene}
-\title{Subset ASE data by a gene name and create an interpolated exon coordinate file}
+\title{Subset ASE data by a gene name and create an interpolated exon coordinate file.}
 \usage{
 ase_data_in_gene(ase_data, exons_all, gene_symbol)
 }
@@ -17,7 +17,7 @@ ase_data_in_gene(ase_data, exons_all, gene_symbol)
 A list that contains the subsetted ASE data frame for the given gene, and the interpolated exon coordinates for plotting
 }
 \description{
-Subset ASE data by a gene name and create an interpolated exon coordinate file
+Subset ASE data by a gene name and create an interpolated exon coordinate file.
 }
 \examples{
 data('ase_data.test')

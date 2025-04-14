@@ -16,13 +16,13 @@ if (! data_type %in% c('pat-freq', 'mat-freq')) {
 stop(paste0(data_type, " is not 'pat-freq', or 'mat-freq"))}
 
 gene_symbols = as.character(gene_symbols)
-#snp_data = ase_data %>% filter((gene_name_from_exons %in% gene_symbols) & (!is.na(PatFreq)))
-snp_data = subset(snp_data, ((gene_name_from_exons %in% gene_symbols) & (!is.na(PatFreq))))
+#ase_data = ase_data %>% filter((gene_name_from_exons %in% gene_symbols) & (!is.na(PatFreq)))
+ase_data = subset(ase_data, ((gene_name_from_exons %in% gene_symbols) & (!is.na(PatFreq))))
 
-if (length(unique(as.character(snp_data$gene_id_from_exons))) == 0) {
+if (length(unique(as.character(ase_data$gene_id_from_exons))) == 0) {
 stop(paste0("None of the genes is not found"))}
 
-counts_bygene = aggregate(subset(snp_data, select=c(PatDepth,MatDepth,totalCount)),by=list(snp_data$RNAid,snp_data$gene_id_from_exons,snp_data$gene_name_from_exons),sum)
+counts_bygene = aggregate(subset(ase_data, select=c(PatDepth,MatDepth,totalCount)),by=list(ase_data$RNAid,ase_data$gene_id_from_exons,ase_data$gene_name_from_exons),sum)
 colnames(counts_bygene)[1:3] = c('RNAid','gene_id','gene_name')
 counts_bygene$PatFreq_PerGenePerRNAid = counts_bygene$PatDepth/counts_bygene$totalCount
 

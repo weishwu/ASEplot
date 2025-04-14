@@ -10,12 +10,13 @@ Description: plot ASE data
 License: GPL (>= 2)
 URL: https://cran.r-project.org/package=ASEplot
 Encoding: UTF-8
+LazyData: true
 Imports:
-    ggplot2
-    ggrepel
-    pheatmap
-    tidyverse
-Imports:
+    ggplot2,
+    ggrepel,
+    pheatmap,
+    dplyr,
+    tidyverse,
     roxygen2
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
