@@ -38,7 +38,11 @@ ase_selc = ase_df_uniqGene %>% filter(
 
 ```
 contam = unique(ase_df_uniqGene %>% select(RNAid, nonAltFreq_perRNAid, nonRefFreq_perRNAid))
-ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) + geom_point(alpha=0.6) + theme_bw() + geom_vline(xintercept = 0.05, color='red', linetype='dashed',alpha=0.6) + geom_text_repel(data = contam %>% filter(nonAltFreq_perRNAid > 0.05), aes(label = RNAid))
+ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) + 
+   geom_point(alpha=0.6) + 
+   theme_bw() + 
+   geom_vline(xintercept = 0.05, color='red', linetype='dashed',alpha=0.6) + 
+   geom_text_repel(data = contam %>% filter(nonAltFreq_perRNAid > 0.05), aes(label = RNAid))
 ```
 ![](figures/contam.png)
 
@@ -46,11 +50,21 @@ ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) + geom_point(a
 - Check contamination per sample and per gene
 
 ```
-gene_contam = unique(ase_df_uniqGene %>% filter(! is.na(homRef_nonRefFreq_mean_perGene_perRNAid)) %>% select(RNAid, gene_from_exons,homRef_nonRefFreq_mean_perGene_perRNAid))
+gene_contam = unique(ase_df_uniqGene %>% 
+   filter(! is.na(homRef_nonRefFreq_mean_perGene_perRNAid)) %>% 
+   select(RNAid, gene_from_exons,homRef_nonRefFreq_mean_perGene_perRNAid))
 
-gene_contam = gene_contam %>% pivot_wider(id_cols = gene_from_exons, names_from = RNAid, values_from = homRef_nonRefFreq_mean_perGene_perRNAid) %>% column_to_rownames('gene_from_exons')
+gene_contam = gene_contam %>% 
+   pivot_wider(id_cols = gene_from_exons, 
+               names_from = RNAid, 
+               values_from = homRef_nonRefFreq_mean_perGene_perRNAid) %>% 
+   column_to_rownames('gene_from_exons')
 
-pheatmap(gene_contam[1:40,1:20], cluster_cols = FALSE, cluster_rows = FALSE, na_col ='white',color = colorRampPalette(c("skyblue", "red"))(500),breaks = seq(0, 0.05, 0.05/500))
+pheatmap(gene_contam[1:40,1:20], 
+         cluster_cols = FALSE, 
+         cluster_rows = FALSE, 
+         na_col ='white',color = colorRampPalette(c("skyblue", "red"))(500),
+         breaks = seq(0, 0.05, 0.05/500))
 ```
 ![](figures/contam_per_gene.png)
 
