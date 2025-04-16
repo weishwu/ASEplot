@@ -33,7 +33,7 @@ if (!is.null(sample_name)) {
 if (! sample_name %in% snp_data$RNAid) {
 stop(paste0(sample_name, "is not found in data"))}
 
-snps_loc_sample=unique(snp_data %>% filter(RNAid == sample_name) %>% select(c(contig,position)))
+snps_loc_sample=unique(snp_data %>% filter(RNAid == sample_name) %>% dplyr::select(c(contig,position)))
 snps_loc_sample=snps_loc_sample[order(snps_loc_sample$position),]
 snps_grange_sample=GRanges(seqnames = snps_loc_sample$contig,ranges = IRanges(start = snps_loc_sample$position, end = snps_loc_sample$position))
 snps_sample_track=AnnotationTrack(snps_grange_sample, name = paste("SNPs_", sample_name, sep=""), stacking="dense")

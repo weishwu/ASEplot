@@ -26,7 +26,7 @@ ase_selc = ase_df_uniqGene %>% filter(
     (totalCount >= 10) & 
     (!is.na(mergedExons_all)) & 
     (!grepl(':', mergedExons_all)) &
-    (nonAltFreq_perRNAid < 0.05)) %>% select(
+    (nonAltFreq_perRNAid < 0.05)) %>% dplyr::select(
     RNAid,contig,position,totalCount,strand,rawASE,mergedExons_all,PatFreq,PatDepth,MatDepth,mergedExons_all,gene_name_from_exons,gene_id_from_exons)
 ```
 
