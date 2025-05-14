@@ -13,21 +13,22 @@ library(pheatmap)
 library(ggrepel)
 library(ASEplot)
 
-ase_data = readRDS('~/Downloads/ase_data.realdata.Rds')
-
-ase_df = ase_data$ase_data
+data('ase_data.test')
+ase_df = ase_data$ase_df
 exons = ase_data$union_exons_per_gene
 
 # Select only the lines with unique genes
-ase_df_uniqGene = ase_df %>% filter(! grepl(':', gene_from_exons))
+ase_df_uniqGene = ase_df %>% filter(! grepl(';', genes_exonic))
 
 # Filter data
 ase_selc = ase_df_uniqGene %>% filter( 
     (totalCount >= 10) & 
-    (!is.na(mergedExons_all)) & 
-    (!grepl(':', mergedExons_all)) &
+    (!is.na(exons_merged)) & 
+    (!grepl(';', exons_merged)) &
     (nonAltFreq_perRNAid < 0.05)) %>% dplyr::select(
-    RNAid,variantID,contig,position,strand,refCount,altCount,totalCount,rawASE,mergedExons_all,mergedExons_all_geneType_code,PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,gene_name_from_exons,gene_id_from_exons,gene_from_exons)
+    RNAid,variantID,contig,position,strand,refCount,altCount,
+    totalCount,rawASE,exons_merged,gene_type_exonic,
+    PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,genes_exonic)
 ```
 
 ## Plots
@@ -51,16 +52,16 @@ ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) +
 
 ```
 gene_contam = unique(ase_df_uniqGene %>% 
-   filter(! is.na(homRef_nonRefFreq_mean_perGene_perRNAid)) %>% 
-   select(RNAid, gene_from_exons,homRef_nonRefFreq_mean_perGene_perRNAid))
+   filter(! is.na(homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid)) %>% 
+   select(RNAid, genes_exonic,homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid))
 
 gene_contam = gene_contam %>% 
-   pivot_wider(id_cols = gene_from_exons, 
+   pivot_wider(id_cols = genes_exonic, 
                names_from = RNAid, 
-               values_from = homRef_nonRefFreq_mean_perGene_perRNAid) %>% 
-   column_to_rownames('gene_from_exons')
+               values_from = homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid) %>% 
+   column_to_rownames('genes_exonic')
 
-pheatmap(gene_contam[1:40,1:20], 
+pheatmap(gene_contam[1:40,], 
          cluster_cols = FALSE, 
          cluster_rows = FALSE, 
          na_col ='white',color = colorRampPalette(c("skyblue", "red"))(500),
@@ -73,20 +74,20 @@ pheatmap(gene_contam[1:40,1:20],
 
 - With transcripts split
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'split', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'split', 'hg38', '123884')
 ```
 ![](figures/snp_location.png)
 
 - With transcripts collapsed
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', 'hg38', '123884')
 ```
 ![](figures/snp_location_collapsed.png)
 
 
 ### Gene-level average POE (Parent-Of-Origin) ASE for a given gene across samples
 ```
-gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '94965')
+gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '123884')
 ```
 ![](figures/histogram.png)
 
@@ -107,13 +108,14 @@ snp_gene_ase_heatmap(ase_selc, exons, 'RHOBTB3', 'pat-freq')
 
 ### SNP-level ASE for a given gene in a box plot
 ```
-snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq') 
+snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 ```
 ![](figures/boxplot.png)
 
 ### SNP-level ASE for a given gene in a scatter plot
 ```
-snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','94965')
+snp_gene_ase_scatter(ase_selc, exons, 'RHOBTB3','pat-freq','123884')
 ```
 ![](figures/scatter.png)
+
 

@@ -12,9 +12,10 @@
 ase_data_in_gene = function(ase_data, exons_all, gene_symbol)
 {
 gene_symbol = as.character(gene_symbol)
-#gene_data_allsamples = ase_data %>% filter(gene_name_from_exons == gene_symbol)
-gene_data_allsamples = subset(ase_data, gene_name_from_exons == gene_symbol)
-if (length(unique(as.character(gene_data_allsamples$gene_id_from_exons)))!=1) {
+ase_data$genes_exonic_symbol = sapply(ase_data$genes_exonic, get_gene_symbol)
+gene_data_allsamples = subset(ase_data, genes_exonic_symbol == 
+        gene_symbol)
+if (length(unique(as.character(gene_data_allsamples$genes_exonic)))!=1) {
 stop(paste0(gene_symbol," is not found or matches multiple gene IDs"))}
 
 exons = as.data.frame(exons_all[exons_all[,6] == gene_symbol, , drop=F],stringsAsFactors = F)

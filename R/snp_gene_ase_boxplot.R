@@ -11,10 +11,12 @@
 snp_gene_ase_boxplot = function(ase_data, gene_symbol, data_type) {
 
 gene_symbol = as.character(gene_symbol)
-#snp_data = ase_data %>% filter(gene_name_from_exons == gene_symbol)
-snp_data = subset(ase_data, (gene_name_from_exons == gene_symbol))
 
-if (length(unique(as.character(snp_data$gene_id)))!=1) {
+ase_data$genes_exonic_symbol = sapply(ase_data$genes_exonic, get_gene_symbol)
+
+snp_data = subset(ase_data, (genes_exonic_symbol == gene_symbol))
+
+if (length(unique(as.character(snp_data$genes_exonic)))!=1) {
 stop(paste0(gene_symbol," is not found or matches multiple gene IDs"))}
 
 if (data_type == 'ase') {

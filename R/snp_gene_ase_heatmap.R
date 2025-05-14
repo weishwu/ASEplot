@@ -20,8 +20,8 @@ snp_data_exons = ase_data_in_gene(ase_data, exons_all, gene_symbol)
 snp_data = snp_data_exons[[1]]
 exons_nospace = snp_data_exons[[2]]
 
-gene_type = unique(matrix(unlist(strsplit(as.character(snp_data$mergedExons_all),';')),nrow(snp_data),7,byrow=T)[,7])
-gene_strand = unique(matrix(unlist(strsplit(as.character(snp_data$mergedExons_all),';')),nrow(snp_data),7,byrow=T)[,4])
+gene_type = unique(matrix(unlist(strsplit(as.character(snp_data$exons_merged),';')),nrow(snp_data),7,byrow=T)[,7])
+gene_strand = unique(matrix(unlist(strsplit(as.character(snp_data$exons_merged),';')),nrow(snp_data),7,byrow=T)[,4])
 
 exon_blocks = data.frame(x1=c(exons_nospace[,3]), x2=exons_nospace[,4], y1=-0.01, y2=1.01, t=rep(c('a','b'),1e6)[1:nrow(exons_nospace)])
 

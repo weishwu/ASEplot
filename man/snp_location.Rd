@@ -9,6 +9,7 @@ snp_location(
   exons_all,
   gene_symbol,
   transcripts_display,
+  assembly,
   sample_name = NULL
 )
 }
@@ -20,6 +21,8 @@ snp_location(
 \item{gene_symbol}{Gene symbol.}
 
 \item{transcripts_display}{Either 'split' (keeps all the transcripts displayed separately) or 'collapse' (collapses the transcripts into a single model).}
+
+\item{assembly}{Either 'hg38' or 'mm10'.}
 
 \item{sample_name}{If a sample name is given, the SNP positions from this sample will be indicated.}
 }
@@ -33,5 +36,5 @@ Plot SNP positions relative to the given gene.
 data('ase_data.test')
 ase_df = ase_data$ase_df
 exons = ase_data$union_exons_per_gene
-snp_location(ase_df, exons, "RHOBTB3", 'collapse', '123882')
+snp_location(ase_df, exons, "RHOBTB3", 'collapse', 'hg38', '123882')
 }

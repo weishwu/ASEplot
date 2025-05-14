@@ -18,13 +18,14 @@ stop(paste0(data_type, " is not 'pat-freq', or 'mat-freq"))}
 if (is.null(binwidth)) {binwidth = 0.01}
 
 gene_symbol = as.character(gene_symbol)
-snp_data = ase_data %>% filter((gene_name_from_exons == gene_symbol) & (!is.na(PatFreq)))
+ase_data$genes_exonic_symbol = sapply(ase_data$genes_exonic, get_gene_symbol)
+snp_data = subset(ase_data, ((genes_exonic_symbol == gene_symbol) & (!is.na(PatFreq))))
 
-if (length(unique(as.character(snp_data$gene_id)))!=1) {
+if (length(unique(as.character(snp_data$genes_exonic)))!=1) {
 stop(paste0(gene_symbol," is not found or matches multiple gene IDs"))}
 
-counts_bygene = aggregate(subset(snp_data, select=c(PatDepth,MatDepth,totalCount)),by=list(snp_data$RNAid,snp_data$gene_id,snp_data$gene_name_from_exons),sum)
-colnames(counts_bygene)[1:3] = c('RNAid','gene_id','gene_name_from_exons')
+counts_bygene = aggregate(subset(snp_data, select=c(PatDepth,MatDepth,totalCount)),by=list(snp_data$RNAid,snp_data$genes_exonic),sum)
+colnames(counts_bygene)[1:2] = c('RNAid','gene_exonic')
 counts_bygene$PatFreq_PerGenePerRNAid = counts_bygene$PatDepth/counts_bygene$totalCount
 
 if (data_type == 'pat-freq') {
