@@ -47,11 +47,11 @@ color_key = c("white", "green")
 leg_lab = 'ASE (|0.5 - RefFreq|)'
 } else if (data_type == 'pat-freq') {
 color_range = c(0, 1)
-color_key = c("red", "white", "green")
+color_key = c("deeppink", "white", "deepskyblue")
 leg_lab = 'Paternal Allele Freq'
 } else if (data_type == 'mat-freq') {
 color_range = c(0, 1)
-color_key = c("red", "white", "green")
+color_key = c("deepskyblue", "white", "deeppink")
 leg_lab = 'Maternal Allele Freq'}
 
 ase_heatmap = ggplot(htdata, aes(X, Y)) + 

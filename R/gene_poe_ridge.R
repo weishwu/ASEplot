@@ -38,7 +38,7 @@ geom_density_ridges_gradient(scale = 1, rel_min_height = 0.01) +
 xlim(0,1) +
 theme_classic() +
 xlab(x_lab) + ylab('Gene') +
-scale_fill_gradientn(name = x_lab, limits = c(0,1),colours=c("red", "white", "green")) +
+scale_fill_gradientn(name = x_lab, limits = c(0,1),colours=c("deeppink", "white", "deepskyblue")) +
 theme(plot.margin=unit(c(0.5,0,0.5,0), "cm"), axis.text=element_text(size=10),
       axis.title=element_text(size=15),
       plot.title=element_text(size=20))  
