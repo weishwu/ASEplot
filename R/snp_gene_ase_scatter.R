@@ -58,8 +58,8 @@ snpCount = sum(snp_data$samples == sample_name)
 median_val = format(round(median(snp_data$data_to_plot[snp_data$samples == sample_name], na.rm = T),2),nsmall=2)
 
 scatterplot = ggplot(data = snp_data %>% filter(samples == 'others'), aes(x=interpolated, y=data_to_plot, col=samples, shape=samples, alpha=samples)) + 
-   geom_point(size=2) + 
-   geom_point(data=snp_data %>% filter(samples != 'others'), aes(x=interpolated, y=data_to_plot, col=samples, shape=samples, alpha=samples), inherit.aes = FALSE) +
+   geom_point(size=5) + 
+   geom_point(data=snp_data %>% filter(samples != 'others'), aes(x=interpolated, y=data_to_plot, col=samples, shape=samples, alpha=samples), inherit.aes = FALSE, size = 5) +
    theme_classic() + 
    scale_color_manual(values=c("black", "red")) +
    scale_shape_manual(values=c(16, 17)) +
@@ -74,7 +74,7 @@ return(scatterplot)
 } else {
 
 scatterplot = ggplot(data=snp_data, aes(x=interpolated, y=data_to_plot)) + 
-   geom_point(col="black", shape=16, alpha=0.2, size=2) + 
+   geom_point(col="black", shape=16, alpha=0.2, size=5) + 
    theme_classic() + 
    geom_vline(xintercept = exon_blocks$x1,col='gray60',alpha=0.2) +
    geom_hline(yintercept = hmarks, color = "gray60", alpha=0.2) +
