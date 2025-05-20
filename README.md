@@ -73,20 +73,20 @@ pheatmap(gene_contam[1:40,1:20],
 
 - With transcripts split
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'split', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'split', '123884')
 ```
 ![](figures/snp_location.png)
 
 - With transcripts collapsed
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '123884')
 ```
 ![](figures/snp_location_collapsed.png)
 
 
 ### Gene-level average POE (Parent-Of-Origin) ASE for a given gene across samples
 ```
-gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '94965')
+gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '123884')
 ```
 ![](figures/histogram.png)
 
@@ -113,7 +113,7 @@ snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 
 ### SNP-level ASE for a given gene in a scatter plot
 ```
-snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','94965')
+snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','123884')
 ```
 ![](figures/scatter.png)
 
