@@ -13,7 +13,7 @@ library(pheatmap)
 library(ggrepel)
 library(ASEplot)
 
-ase_data = readRDS('~/Downloads/ase_data.realdata.Rds')
+data('ase_data.test')
 
 ase_df = ase_data$ase_data
 exons = ase_data$union_exons_per_gene
