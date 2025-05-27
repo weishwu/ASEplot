@@ -7,24 +7,24 @@ using LinearAlgebra
 using Printf
 using Statistics
 
-function genetic_ase(input_file::String) 
+function po_test(input_file::String) 
     println("Processing file: ", input_file)
     df = CSV.File(open(input_file); missingstring=["NA"]) |> DataFrame
 
     function prep(rout, eout, df)
 
-        write(eout, @sprintf("%d distinct genes in initial file.\n", length(unique(df[:, :gene]))))
+        write(eout, @sprintf("%d distinct genes in initial file.\n", length(unique(df[:, :genes_exonic]))))
 
-        f = r -> r.RefAllele == r.PatAllele ? r.refCount : r.altCount
+        f = r -> r.refAllele == r.PatAllele ? r.refCount : r.altCount
         df[:, :patCount] = [f(row) for row in eachrow(df)]
 
-        f = r -> r.RefAllele == r.MatAllele ? r.refCount : r.altCount
+        f = r -> r.refAllele == r.MatAllele ? r.refCount : r.altCount
         df[:, :matCount] = [f(row) for row in eachrow(df)]
 
         # Phased data
         dp = filter(r -> !ismissing(r.PatAllele), df)
         dp = filter(r -> !ismissing(r.MatAllele), df)
-        write(eout, @sprintf("%d distinct genes after dropping unphased data.\n", length(unique(dp[:, :gene]))))
+        write(eout, @sprintf("%d distinct genes after dropping unphased data.\n", length(unique(dp[:, :genes_exonic]))))
 
         return dp
     end
@@ -64,16 +64,16 @@ function genetic_ase(input_file::String)
     function fitmodel(ky, v, rout, eout, block, po, pose, rap)
 
         # Create a dataframe of maternal read counts
-        vm = v[:, [:RNAid, :snp, :matCount, :RefAllele, :MatAllele, :PatAllele]]
+        vm = v[:, [:RNAid, :variantID, :matCount, :refAllele, :MatAllele, :PatAllele]]
         vm = rename(vm, :matCount => :count)
         vm[:, :po] .= -1 / 2
-        vm[:, :ra] = [r.RefAllele == r.MatAllele ? 0.5 : -0.5 for r in eachrow(vm)]
+        vm[:, :ra] = [r.refAllele == r.MatAllele ? 0.5 : -0.5 for r in eachrow(vm)]
 
         # Create a dataframe of paternal read counts
-        vp = v[:, [:RNAid, :snp, :patCount, :RefAllele, :MatAllele, :PatAllele]]
+        vp = v[:, [:RNAid, :variantID, :patCount, :refAllele, :MatAllele, :PatAllele]]
         vp = rename(vp, :patCount => :count)
         vp[:, :po] .= 1 / 2
-        vp[:, :ra] = [r.RefAllele == r.PatAllele ? 0.5 : -0.5 for r in eachrow(vp)]
+        vp[:, :ra] = [r.refAllele == r.PatAllele ? 0.5 : -0.5 for r in eachrow(vp)]
 
         # Merge the datasets
         va = vcat(vm, vp)
@@ -99,7 +99,7 @@ function genetic_ase(input_file::String)
         end
 
         # If there is only one SNP, use the base model.
-        if length(unique(va[:, :snp])) == 1
+        if length(unique(va[:, :variantID])) == 1
             b0 = coef(m0)
             bse0 = sqrt.(diag(vcov(m0)))
             push!(block, ky)
@@ -111,7 +111,7 @@ function genetic_ase(input_file::String)
         end
 
         # Add SNP main effects
-        va, mep, pcme = build_pcs(@formula(count ~ snp), va, "PCME", 0.01, 10)
+        va, mep, pcme = build_pcs(@formula(count ~ variantID), va, "PCME", 0.01, 10)
         tm = vcat([:po, :ra], Symbol.(pcme))
         f1 = Term(:count) ~ sum(Term.(tm))
         m1 = try
@@ -122,7 +122,7 @@ function genetic_ase(input_file::String)
         end
 
         # Add SNP x ref/alt interactions, which capture genetic ASE
-        va, ixp, pcix = build_pcs(@formula(count ~ snp & ra), va, "PCIX", 0.01, 10; u0 = mep)
+        va, ixp, pcix = build_pcs(@formula(count ~ variantID & ra), va, "PCIX", 0.01, 10; u0 = mep)
         tm = vcat(tm, Symbol.(pcix))
         f2 = Term(:count) ~ sum(Term.(tm))
         m2x = try
@@ -191,19 +191,19 @@ function genetic_ase(input_file::String)
         po, pose, rap = Union{Float64,Missing}[], Union{Float64,Missing}[], Union{Float64,Missing}[]
         if analysis_level == :gene
             block = Any[]
-            for (k, v) in pairs(groupby(dp, :gene))
+            for (k, v) in pairs(groupby(dp, :genes_exonic))
                 block, po, pose, rap = fitmodel(k, v, rout, eout, block, po, pose, rap)
             end
             gene = first.(block)
-            rslt = DataFrame(:gene => gene, :po => po, :po_se => pose, :Genetic_ASE_p => rap)
+            rslt = DataFrame(:genes_exonic => gene, :po => po, :po_se => pose, :Genetic_ASE_p => rap)
         elseif analysis_level == :exon
             block = Any[]
-            for (k, v) in pairs(groupby(dp, [:gene, :exon]))
+            for (k, v) in pairs(groupby(dp, [:genes_exonic, :exons_merged]))
                 block, po, pose, rap = fitmodel(k, v, rout, eout, block, po, pose, rap)
             end
             gene = first.(block)
             exon = last.(block)
-            rslt = DataFrame(:gene => gene, :exon => exon, :po => po, :po_se => pose, :Genetic_ASE_p => rap)
+            rslt = DataFrame(:genes_exonic => gene, :exons_merged => exon, :po => po, :po_se => pose, :Genetic_ASE_p => rap)
         end
 
         rslt[:, :po_z] = rslt[:, :po] ./ rslt[:, :po_se]
@@ -225,3 +225,5 @@ function genetic_ase(input_file::String)
     end
 end
 
+
+po_test(ARGS[1])
