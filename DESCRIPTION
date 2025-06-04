@@ -1,7 +1,7 @@
 Package: ASEplot
 Version: 0.0
 Date: 2025-04-08
-Title: plot ASE data
+Title: ASEplot: Allele Specific Expression data plot
 Authors@R: c(person("Weisheng Wu", "Developer", role = c("aut", "cre"), email = "weishwu@umich.edu"))
 Author: Weisheng Wu [aut, cre]
 Maintainer: Weisheng Wu <weishwu@umich.edu>
