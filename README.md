@@ -1,5 +1,8 @@
 # ASEplot: Allele Specific Expression data plot
 
+ASEplot is an R library used to generate visualization of allele-specific expression (ASE) dat
+a that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu/ASET).
+
 ## Load data and filter
 ```
 library(ggplot2)
@@ -13,7 +16,7 @@ library(pheatmap)
 library(ggrepel)
 library(ASEplot)
 
-data('ase_data.test')
+ase_data = readRDS('~/Downloads/ase_data.realdata.Rds')
 
 ase_df = ase_data$ase_data
 exons = ase_data$union_exons_per_gene
@@ -27,8 +30,20 @@ ase_selc = ase_df_uniqGene %>% filter(
     (!is.na(mergedExons_all)) & 
     (!grepl(':', mergedExons_all)) &
     (nonAltFreq_perRNAid < 0.05)) %>% dplyr::select(
-    RNAid,variantID,contig,position,refAllele,altAllele,strand,refCount,altCount,totalCount,rawASE,mergedExons_all,mergedExons_all_geneType_code,PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,gene_name_from_exons,gene_id_from_exons,gene_from_exons)
+    RNAid,variantID,contig,position,strand,refCount,altCount,totalCount,rawASE,mergedExons_all,mergedExons_all_geneType_code,PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,gene_name_from_exons,gene_id_from_exons,gene_from_exons)
+
+# extract phased data
+ase_selc_phased = ase_selc %>% filter(!is.na(PatAllele))
+write.csv(ase_selc_phased, file = 'ase_selc_phased.csv', row.names = FALSE)
 ```
+
+## Parent-of-origin testing
+```
+julia inst/julia/po_test.jl ase_selc_phased.csv
+```
+- Output: megpeg_gene.csv
+  - po: the estimated coefficient for PofO effect as the PofO score. |po| > 3 denotes strong parentally determined ASE, implying at least a 20-fold difference between the two alleles.
+  - po_z: z-score of po. |po_z| > 3 denotes statistical significance.
 
 ## Plots
 
@@ -73,20 +88,20 @@ pheatmap(gene_contam[1:40,1:20],
 
 - With transcripts split
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'split', '123884')
+snp_location(ase_selc, exons, 'RHOBTB3', 'split', '94965')
 ```
 ![](figures/snp_location.png)
 
 - With transcripts collapsed
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '123884')
+snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '94965')
 ```
 ![](figures/snp_location_collapsed.png)
 
 
 ### Gene-level average POE (Parent-Of-Origin) ASE for a given gene across samples
 ```
-gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '123884')
+gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '94965')
 ```
 ![](figures/histogram.png)
 
@@ -113,7 +128,7 @@ snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 
 ### SNP-level ASE for a given gene in a scatter plot
 ```
-snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','123884')
+snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','94965')
 ```
 ![](figures/scatter.png)
 

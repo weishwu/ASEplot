@@ -4,7 +4,7 @@
 \alias{get_gene_symbol}
 \title{Get gene symbos from the genes_exonic column.}
 \usage{
-get_gene_symbol(x)
+get_gene_symbol(gene_id_name)
 }
 \arguments{
 \item{ase_data}{ASE data frame, generated from ASEprep}

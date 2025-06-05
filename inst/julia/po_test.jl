@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using DataFrames
 using CSV
 using CodecZlib

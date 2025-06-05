@@ -1,12 +1,12 @@
 Package: ASEplot
 Version: 0.0
-Date: 2025-04-08
+Date: 2025-06-04
 Title: ASEplot: Allele Specific Expression data plot
 Authors@R: c(person("Weisheng Wu", "Developer", role = c("aut", "cre"), email = "weishwu@umich.edu"))
 Author: Weisheng Wu [aut, cre]
 Maintainer: Weisheng Wu <weishwu@umich.edu>
 Depends: R (>= 3.1.0)
-Description: plot ASE data
+Description: ASEplot is an R library used to generate visualization of allele-specific expression (ASE) data that is prepared using the Nextflow pipeline ASET.
 License: GPL (>= 2)
 URL: https://cran.r-project.org/package=ASEplot
 Encoding: UTF-8
@@ -14,9 +14,13 @@ LazyData: true
 Imports:
     ggplot2,
     ggrepel,
+    ggridges,
     pheatmap,
     dplyr,
     tidyverse,
+    GenomicRanges,
+    Gviz,
+    biomaRt,
     roxygen2
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

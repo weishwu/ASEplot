@@ -7,7 +7,6 @@
 #' data('ase_data.test')
 #' ase_df = ase_data$ase_df
 #' gene_poe_ridge(ase_df, c("MEG3", "PEG3", "RHOBTB3"), 'pat-freq')
-#' import ggridges
 #' @export
 gene_poe_ridge = function(ase_data, gene_symbols, data_type)
 {

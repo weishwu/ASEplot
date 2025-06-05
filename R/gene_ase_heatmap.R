@@ -20,8 +20,8 @@ snp_data_exons = ase_data_in_gene(ase_data, exons_all, gene_symbol)
 snp_data = snp_data_exons[[1]]
 exons_nospace = snp_data_exons[[2]]
 
-gene_type = unique(matrix(unlist(strsplit(as.character(snp_data$mergedExons_all),';')),nrow(snp_data),7,byrow=T)[,7])
-gene_strand = unique(matrix(unlist(strsplit(as.character(snp_data$mergedExons_all),';')),nrow(snp_data),7,byrow=T)[,4])
+gene_type = unique(matrix(unlist(strsplit(as.character(snp_data$exons_merged),':')),nrow(snp_data),7,byrow=T)[,7])
+gene_strand = unique(matrix(unlist(strsplit(as.character(snp_data$exons_merged),':')),nrow(snp_data),7,byrow=T)[,4])
 
 exon_blocks = data.frame(x1=c(exons_nospace[,3]), x2=exons_nospace[,4], y1=-0.01, y2=1.01, t=rep(c('a','b'),1e6)[1:nrow(exons_nospace)])
 
@@ -43,15 +43,15 @@ htdata$Y = factor(htdata$Y, levels=unique((htdata$Y)[order(htdata[,4])]))
 
 if (data_type == 'ase') {
 color_range = c(0, 0.5)
-color_key = c("white", "green")
+color_key = c("white", "deepskyblue")
 leg_lab = 'ASE (|0.5 - RefFreq|)'
 } else if (data_type == 'pat-freq') {
 color_range = c(0, 1)
-color_key = c("red", "white", "green")
+color_key = c("deeppink", "white", "deepskyblue")
 leg_lab = 'Paternal Allele Freq'
 } else if (data_type == 'mat-freq') {
 color_range = c(0, 1)
-color_key = c("red", "white", "green")
+color_key = c("deepskyblue", "white", "deeppink")
 leg_lab = 'Maternal Allele Freq'}
 
 ase_heatmap = ggplot(htdata, aes(X, Y)) + 
