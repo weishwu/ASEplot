@@ -16,21 +16,26 @@ library(pheatmap)
 library(ggrepel)
 library(ASEplot)
 
-ase_data = readRDS('~/Downloads/ase_data.realdata.Rds')
+data(ase_data.test)
 
-ase_df = ase_data$ase_data
-exons = ase_data$union_exons_per_gene
+ase_df = ase_data.test$ase_df
+exons = ase_data.test$union_exons_per_gene
 
 # Select only the lines with unique genes
-ase_df_uniqGene = ase_df %>% filter(! grepl(':', gene_from_exons))
+ase_df_uniqGene = ase_df %>% filter(! grepl(';', genes_exonic)) %>% filter(!is.na(exons_merged))
 
 # Filter data
 ase_selc = ase_df_uniqGene %>% filter( 
     (totalCount >= 10) & 
-    (!is.na(mergedExons_all)) & 
-    (!grepl(':', mergedExons_all)) &
-    (nonAltFreq_perRNAid < 0.05)) %>% dplyr::select(
-    RNAid,variantID,contig,position,strand,refCount,altCount,totalCount,rawASE,mergedExons_all,mergedExons_all_geneType_code,PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,gene_name_from_exons,gene_id_from_exons,gene_from_exons)
+    (!is.na(exons_merged)) & 
+    (!grepl(';', exons_merged)) &
+    (nonAltFreq_perRNAid < 0.05) &
+    (nonRefFreq_perRNAid < 0.05) &
+    ((homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid < 0.05) | is.na(homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid))) %>% 
+    dplyr::select(
+    RNAid,variantID,contig,position,refAllele,altAllele,strand,refCount,altCount,
+    totalCount,rawASE,exons_merged,gene_type_exonic,
+    PatAllele,MatAllele,PatDepth,MatDepth,PatFreq,genes_exonic,homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid)
 
 # extract phased data
 ase_selc_phased = ase_selc %>% filter(!is.na(PatAllele))
@@ -128,7 +133,7 @@ snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 
 ### SNP-level ASE for a given gene in a scatter plot
 ```
-snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','94965')
+snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','123884')
 ```
 ![](figures/scatter.png)
 
