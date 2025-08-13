@@ -1,7 +1,7 @@
 # ASEplot: Allele Specific Expression data plot
 
-ASEplot is an R library used to generate visualization of allele-specific expression (ASE) dat
-a that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu/ASET).
+- ASEplot is an R library used to generate visualization of allele-specific expression (ASE) data that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu/ASET).
+- For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general)
 
 ## Load data and filter
 ```
@@ -42,7 +42,8 @@ write.csv(ase_selc_phased, file = 'ase_selc_phased.csv', row.names = FALSE)
 
 ## Parent-of-origin testing
 ```
-julia inst/julia/po_test.jl ase_selc_phased.csv
+# if using the environment pulled from docker://weishwu/aseplot:0.0, simply run
+po_test.jl ase_selc_phased.csv
 ```
 - Output: megpeg_gene.csv
   - po: the estimated coefficient for PofO effect as the PofO score. |po| > 3 denotes strong parentally determined ASE, implying at least a 20-fold difference between the two alleles.
