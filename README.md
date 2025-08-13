@@ -5,12 +5,10 @@ a that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu
 
 ## Load data and filter
 ```
-library(ggplot2)
 library(Gviz)
 library(GenomicRanges)
 library(biomaRt)
 library(ggridges)
-library(dplyr)
 library(tidyverse)
 library(pheatmap)
 library(ggrepel)
@@ -18,8 +16,8 @@ library(ASEplot)
 
 data(ase_data.test)
 
-ase_df = ase_data.test$ase_df
-exons = ase_data.test$union_exons_per_gene
+ase_df = ase_data$ase_df
+exons = ase_data$union_exons_per_gene
 
 # Select only the lines with unique genes
 ase_df_uniqGene = ase_df %>% filter(! grepl(';', genes_exonic)) %>% filter(!is.na(exons_merged))
@@ -57,7 +55,7 @@ julia inst/julia/po_test.jl ase_selc_phased.csv
 - Check the distribution of sample contamination measured by the non-Alt-Freq at 1/1 sites, and non-Ref-Freq at 0/0 sites
 
 ```
-contam = unique(ase_df_uniqGene %>% select(RNAid, nonAltFreq_perRNAid, nonRefFreq_perRNAid))
+contam = unique(ase_df_uniqGene %>% dplyr::select(RNAid, nonAltFreq_perRNAid, nonRefFreq_perRNAid))
 ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) + 
    geom_point(alpha=0.6) + 
    theme_bw() + 
@@ -71,16 +69,16 @@ ggplot(contam, aes(x=nonAltFreq_perRNAid, y=nonRefFreq_perRNAid)) +
 
 ```
 gene_contam = unique(ase_df_uniqGene %>% 
-   filter(! is.na(homRef_nonRefFreq_mean_perGene_perRNAid)) %>% 
-   select(RNAid, gene_from_exons,homRef_nonRefFreq_mean_perGene_perRNAid))
+   filter(! is.na(homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid)) %>% 
+   dplyr::select(RNAid, genes_exonic,homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid))
 
 gene_contam = gene_contam %>% 
-   pivot_wider(id_cols = gene_from_exons, 
+   pivot_wider(id_cols = genes_exonic, 
                names_from = RNAid, 
-               values_from = homRef_nonRefFreq_mean_perGene_perRNAid) %>% 
-   column_to_rownames('gene_from_exons')
+               values_from = homRef_nonRefFreq_atMatAlt_mean_perGene_perRNAid) %>% 
+   column_to_rownames('genes_exonic')
 
-pheatmap(gene_contam[1:40,1:20], 
+pheatmap(gene_contam[,1:20], 
          cluster_cols = FALSE, 
          cluster_rows = FALSE, 
          na_col ='white',color = colorRampPalette(c("skyblue", "red"))(500),
@@ -93,20 +91,20 @@ pheatmap(gene_contam[1:40,1:20],
 
 - With transcripts split
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'split', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'split', 'hg38', 'S360')
 ```
 ![](figures/snp_location.png)
 
 - With transcripts collapsed
 ```
-snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', '94965')
+snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', 'hg38', 'S360')
 ```
 ![](figures/snp_location_collapsed.png)
 
 
 ### Gene-level average POE (Parent-Of-Origin) ASE for a given gene across samples
 ```
-gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = '94965')
+gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = 'S360')
 ```
 ![](figures/histogram.png)
 
@@ -133,7 +131,7 @@ snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 
 ### SNP-level ASE for a given gene in a scatter plot
 ```
-snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','123884')
+snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','S360')
 ```
 ![](figures/scatter.png)
 

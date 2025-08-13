@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_gene_symbol.R
 \name{get_gene_symbol}
 \alias{get_gene_symbol}
-\title{Get gene symbos from the genes_exonic column.}
+\title{Get gene symbols from the genes_exonic column.}
 \usage{
 get_gene_symbol(gene_id_name)
 }
@@ -13,7 +13,7 @@ get_gene_symbol(gene_id_name)
 A vector with the gene symbols split from the genes_exonic column
 }
 \description{
-Get gene symbos from the genes_exonic column.
+Get gene symbols from the genes_exonic column.
 }
 \examples{
 data('ase_data.test')

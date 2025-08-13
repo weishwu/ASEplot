@@ -16,56 +16,92 @@
 #' @importFrom biomaRt useEnsembl
 #' @export
 snp_location = function(ase_data, exons_all, gene_symbol, transcripts_display, assembly, sample_name = NULL) {
-
-if (assembly == 'hg38') {
+  
+  if (assembly == 'hg38') {
     dataset_ = 'hsapiens_gene_ensembl'
     genome_ = 'hg38'
-} else if (assembly == 'mm10') {
+  } else if (assembly == 'mm10') {
     dataset_ = 'mmusculus_gene_ensembl'
-    genome_ = 'mm10'}
-
-snp_data_exons = ase_data_in_gene(ase_data, exons_all, gene_symbol)
-snp_data = snp_data_exons[[1]]
-exons_nospace = snp_data_exons[[2]]
-exons=as.data.frame(exons_all[exons_all[,6]==gene_symbol, , drop=F],stringsAsFactors = F)
-exons[,2:3]=lapply(exons[,2:3], function(x) if(is.character(x)) as.numeric(x) else x)
-exons = exons[order(exons[,2]),]
-
-snps_loc_all=unique(subset(snp_data,select=c(contig,position)))
-snps_loc_all=snps_loc_all[order(snps_loc_all$position),]
-snps_grange_all=GRanges(seqnames = snps_loc_all$contig,ranges = IRanges(start = snps_loc_all$position, end = snps_loc_all$position))
-snps_all_track=AnnotationTrack(snps_grange_all, name = "SNPs_all", stacking="dense")
-
-if (!is.null(sample_name)) {
+    genome_ = 'mm10'
+  }
+  
+  snp_data_exons = ase_data_in_gene(ase_data, exons_all, gene_symbol)
+  snp_data = snp_data_exons[[1]]
+  exons_nospace = snp_data_exons[[2]]
+  
+  exons = as.data.frame(exons_all[exons_all[,6] == gene_symbol, , drop = FALSE], stringsAsFactors = FALSE)
+  exons[,2:3] = lapply(exons[,2:3], function(x) if (is.character(x)) as.numeric(x) else x)
+  exons = exons[order(exons[,2]), ]
+  
+  snps_loc_all = unique(subset(snp_data, select = c(contig, position)))
+  snps_loc_all = snps_loc_all[order(snps_loc_all$position), ]
+  snps_grange_all = GRanges(seqnames = snps_loc_all$contig,
+                            ranges = IRanges(start = snps_loc_all$position, end = snps_loc_all$position))
+  snps_all_track = AnnotationTrack(snps_grange_all, name = "SNPs_all", stacking = "dense")
+  
+  if (!is.null(sample_name)) {
     
-if (! sample_name %in% snp_data$RNAid) {
-stop(paste0(sample_name, " is not found in data"))}
-
-snps_loc_sample=unique(snp_data %>% filter(RNAid == sample_name) %>% dplyr::select(c(contig,position)))
-snps_loc_sample=snps_loc_sample[order(snps_loc_sample$position),]
-snps_grange_sample=GRanges(seqnames = snps_loc_sample$contig,ranges = IRanges(start = snps_loc_sample$position, end = snps_loc_sample$position))
-snps_sample_track=AnnotationTrack(snps_grange_sample, name = paste("SNPs_", sample_name, sep=""), stacking="dense")
-
-gtrack=GenomeAxisTrack()
-
-mart=useEnsembl(biomart = "ensembl", dataset = dataset_)
-biomTrack=BiomartGeneRegionTrack(start=min(exons[,2])-1000, end=max(exons[,3])+1000, chromosome=unique(exons[,1]), genome = genome_, name = "ENSEMBL", biomart = mart, transcriptAnnotation = "symbol")
-
-if (transcripts_display == 'split') {
-plotTracks(list(gtrack,snps_all_track,snps_sample_track,biomTrack),from=min(exons[,2])-1000,to=max(exons[,3])+1000)
-} else if (transcripts_display == 'collapse') {
-plotTracks(list(gtrack,snps_all_track,snps_sample_track,biomTrack), collapseTranscripts="meta",from=min(exons[,2])-1000,to=max(exons[,3])+1000)}
-
-} else {
-
-gtrack=GenomeAxisTrack()
-mart=useEnsembl(biomart = "ensembl", dataset = dataset_)
-biomTrack=BiomartGeneRegionTrack(start=min(exons[,2])-1000, end=max(exons[,3])+1000, chromosome=unique(exons[,1]), genome = genome_, name = "ENSEMBL", biomart = mart, transcriptAnnotation = "symbol")
-
-if (transcripts_display == 'split') {
-plotTracks(list(gtrack,snps_all_track,biomTrack),from=min(exons[,2])-1000,to=max(exons[,3])+1000)
-} else if (transcripts_display == 'collapse') {
-plotTracks(list(gtrack,snps_all_track,biomTrack), collapseTranscripts="meta",from=min(exons[,2])-1000,to=max(exons[,3])+1000)}
+    if (!sample_name %in% snp_data$RNAid) {
+      stop(paste0(sample_name, " is not found in data"))
+    }
+    
+    snps_loc_sample = unique(
+      snp_data %>%
+        filter(RNAid == sample_name) %>%
+        dplyr::select(c(contig, position))
+    )
+    snps_loc_sample = snps_loc_sample[order(snps_loc_sample$position), ]
+    snps_grange_sample = GRanges(seqnames = snps_loc_sample$contig,
+                                 ranges = IRanges(start = snps_loc_sample$position, end = snps_loc_sample$position))
+    snps_sample_track = AnnotationTrack(snps_grange_sample, name = paste("SNPs_", sample_name, sep = ""), stacking = "dense")
+    
+    gtrack = GenomeAxisTrack()
+    
+    mart = useEnsembl(biomart = "ensembl", dataset = dataset_)
+    biomTrack = BiomartGeneRegionTrack(
+      start = min(exons[,2]) - 1000,
+      end = max(exons[,3]) + 1000,
+      chromosome = unique(exons[,1]),
+      genome = genome_,
+      name = "ENSEMBL",
+      biomart = mart,
+      transcriptAnnotation = "symbol"
+    )
+    
+    if (transcripts_display == 'split') {
+      plotTracks(list(gtrack, snps_all_track, snps_sample_track, biomTrack),
+                 from = min(exons[,2]) - 1000,
+                 to = max(exons[,3]) + 1000)
+    } else if (transcripts_display == 'collapse') {
+      plotTracks(list(gtrack, snps_all_track, snps_sample_track, biomTrack),
+                 collapseTranscripts = "meta",
+                 from = min(exons[,2]) - 1000,
+                 to = max(exons[,3]) + 1000)
+    }
+    
+  } else {
+    
+    gtrack = GenomeAxisTrack()
+    mart = useEnsembl(biomart = "ensembl", dataset = dataset_)
+    biomTrack = BiomartGeneRegionTrack(
+      start = min(exons[,2]) - 1000,
+      end = max(exons[,3]) + 1000,
+      chromosome = unique(exons[,1]),
+      genome = genome_,
+      name = "ENSEMBL",
+      biomart = mart,
+      transcriptAnnotation = "symbol"
+    )
+    
+    if (transcripts_display == 'split') {
+      plotTracks(list(gtrack, snps_all_track, biomTrack),
+                 from = min(exons[,2]) - 1000,
+                 to = max(exons[,3]) + 1000)
+    } else if (transcripts_display == 'collapse') {
+      plotTracks(list(gtrack, snps_all_track, biomTrack),
+                 collapseTranscripts = "meta",
+                 from = min(exons[,2]) - 1000,
+                 to = max(exons[,3]) + 1000)
+    }
+  }
 }
-}
-

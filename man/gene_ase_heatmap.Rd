@@ -16,7 +16,7 @@ gene_ase_heatmap(ase_data, exons_all, gene_symbol, data_type)
 \item{data_type}{Either 'ase' (|0.5-RefFreq|), 'pat-freq' or 'mat-freq'.}
 }
 \value{
-A ggplot in which each column is a SNP site and eeach row is a sample.
+A ggplot in which each column is a SNP site and each row is a sample.
 }
 \description{
 Plot SNP-level ASE or parental allele frequency distribution as a heatmap for a given gene.
