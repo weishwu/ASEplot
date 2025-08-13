@@ -135,3 +135,5 @@ snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','S360')
 ```
 ![](figures/scatter.png)
 
+## Citation
+- Manuscript under peer review: https://doi.org/10.21203/rs.3.rs-6844336/v1
