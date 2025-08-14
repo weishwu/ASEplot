@@ -3,7 +3,7 @@
 ASEplot is an R library used to generate visualization of allele-specific expression (ASE) data that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu/ASET).
 
 ## Installation
-- ASEplot can be installed from GitHub. Ensure the following dependencies are installed: `tidyverse`, `ggrepel`, `pheatmap`, `Gviz`, `GenomicRanges`, `biomaRt`, and `ggridges`.
+- ASEplot can be installed from GitHub. Ensure the following dependencies are installed: `tidyverse`, `ggrepel`, `pheatmap`, `Gviz`, `GenomicRanges`, `biomaRt`, `ggridges`, and `julia`.
 ```
 install.packages("remotes")
 remotes::install_github("weishwu/ASEplot")
@@ -54,6 +54,8 @@ write.csv(ase_selc_phased, file = 'ase_selc_phased.csv', row.names = FALSE)
 ```
 # if using the environment pulled from docker://weishwu/aseplot:0.0, simply run
 po_test.jl ase_selc_phased.csv
+
+# if ASEplot is pulled from GitHub, po_test.jl is under inst/julia/
 ```
 - Output: megpeg_gene.csv
   - po: the estimated coefficient for PofO effect as the PofO score. |po| > 3 denotes strong parentally determined ASE, implying at least a 20-fold difference between the two alleles.
