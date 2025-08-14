@@ -107,14 +107,14 @@ snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', 'hg38', 'S360')
 ![](figures/snp_location_collapsed.png)
 
 
-### Gene-level average POE (Parent-Of-Origin) ASE for a given gene across samples
+### Gene-level average PofO ASE for a given gene across samples
 ```
 gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = 'S360')
 ```
 ![](figures/histogram.png)
 
 
-### Gene-level average POE ridge plot comparing multiple genes
+### Gene-level average ASE ridge plot comparing multiple genes
 ```
 gene_poe_ridge(ase_selc, c('MEG8', 'CYB5R2', 'IGF2', 'RHOBTB3', 'THEGL', 'GNAS', 'PEG3'), 'pat-freq')
 ```
@@ -141,7 +141,7 @@ snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','S360')
 ![](figures/scatter.png)
 
 
-## Parent-of-origin testing
+## Parent-of-origin effect testing
 ```
 # if using the environment pulled from docker://weishwu/aseplot:0.0, po_test.jl is executable from the Docker/Singularity container. For example:
 
