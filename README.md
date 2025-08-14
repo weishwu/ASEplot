@@ -55,9 +55,9 @@ write.csv(ase_selc_phased, file = 'ase_selc_phased.csv', row.names = FALSE)
 
 ## Parent-of-origin testing
 ```
-# if using the environment pulled from docker://weishwu/aseplot:0.0, simply run
+# if using the environment pulled from docker://weishwu/aseplot:0.0, po_test.jl is executable from the Docker/Singularity container. For example:
 
-po_test.jl ase_selc_phased.csv
+singularity exec aseplot.sif po_test.jl ase_selc_phased.csv
 
 # if ASEplot is pulled from GitHub, po_test.jl is under inst/julia/
 ```
