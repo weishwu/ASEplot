@@ -8,7 +8,10 @@ ASEplot is an R library used to generate visualization of allele-specific expres
 install.packages("remotes")
 remotes::install_github("weishwu/ASEplot")
 ```
-- For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general)
+- For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general). For example:
+```
+singularity build aseplot.sif docker://weishwu/docker://weishwu/aseplot:0.0
+```
 
 ## Load data and filter
 ```
