@@ -53,18 +53,6 @@ ase_selc_phased = ase_selc %>% filter(!is.na(PatAllele))
 write.csv(ase_selc_phased, file = 'ase_selc_phased.csv', row.names = FALSE)
 ```
 
-## Parent-of-origin testing
-```
-# if using the environment pulled from docker://weishwu/aseplot:0.0, po_test.jl is executable from the Docker/Singularity container. For example:
-
-singularity exec aseplot.sif po_test.jl ase_selc_phased.csv
-
-# if ASEplot is pulled from GitHub, po_test.jl is under inst/julia/
-```
-- Output: megpeg_gene.csv
-  - po: the estimated coefficient for PofO effect as the PofO score. |po| > 3 denotes strong parentally determined ASE, implying at least a 20-fold difference between the two alleles.
-  - po_z: z-score of po. |po_z| > 3 denotes statistical significance.
-
 ## Plots
 
 ### Check contamination
@@ -151,6 +139,20 @@ snp_gene_ase_boxplot(ase_selc, 'RHOBTB3', 'pat-freq')
 snp_gene_ase_scatter(ase_selc,exons,'RHOBTB3','pat-freq','S360')
 ```
 ![](figures/scatter.png)
+
+
+## Parent-of-origin testing
+```
+# if using the environment pulled from docker://weishwu/aseplot:0.0, po_test.jl is executable from the Docker/Singularity container. For example:
+
+singularity exec aseplot.sif po_test.jl ase_selc_phased.csv
+
+# if ASEplot is pulled from GitHub, po_test.jl is under inst/julia/
+```
+- Output: megpeg_gene.csv
+  - po: the estimated coefficient for PofO effect as the PofO score. |po| > 3 denotes strong parentally determined ASE, implying at least a 20-fold difference between the two alleles.
+  - po_z: z-score of po. |po_z| > 3 denotes statistical significance.
+
 
 ## Citation
 - Manuscript under peer review: https://doi.org/10.21203/rs.3.rs-6844336/v1
