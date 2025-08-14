@@ -107,7 +107,7 @@ snp_location(ase_selc, exons, 'RHOBTB3', 'collapse', 'hg38', 'S360')
 ![](figures/snp_location_collapsed.png)
 
 
-### Gene-level average PofO ASE for a given gene across samples
+### Gene-level average ASE for a given gene across samples
 ```
 gene_poe_histogram(ase_selc, 'RHOBTB3', 'pat-freq', sample_name = 'S360')
 ```
