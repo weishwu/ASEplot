@@ -10,7 +10,7 @@ remotes::install_github("weishwu/ASEplot")
 ```
 - For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general). For example:
 ```
-singularity build aseplot.sif docker://weishwu/docker://weishwu/aseplot:0.0
+singularity build aseplot.sif docker://weishwu/aseplot:0.0
 ```
 
 ## Load data and filter
