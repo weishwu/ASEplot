@@ -3,15 +3,18 @@
 ASEplot is an R library used to generate visualization of allele-specific expression (ASE) data that is prepared using the Nextflow pipeline [ASET](https://github.com/weishwu/ASET).
 
 ## Installation
+
+- (Recommended) For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general). For example:
+```
+singularity build aseplot.sif docker://weishwu/aseplot:0.0
+```
+
 - ASEplot can be installed from GitHub. Ensure the following dependencies are installed: `tidyverse`, `ggrepel`, `pheatmap`, `Gviz`, `GenomicRanges`, `biomaRt`, `ggridges`, and `julia`.
 ```
 install.packages("remotes")
 remotes::install_github("weishwu/ASEplot")
 ```
-- For quick setup, an environment with ASEplot and all dependencies can be pulled via Docker or Singularity from [docker://weishwu/aseplot:0.0](https://hub.docker.com/repository/docker/weishwu/aseplot/general). For example:
-```
-singularity build aseplot.sif docker://weishwu/aseplot:0.0
-```
+
 
 ## Load data and filter
 ```
